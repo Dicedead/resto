@@ -77,3 +77,7 @@ def plot_mean_all_prices(
         temp = moving_average(resto_df[price_range], moving_average_window)
         plt.plot(resto_df[date_col][:len(temp)], temp)
     plt.show()
+
+
+def taux_var(a, b):
+    return 100 * (a-b)/b
