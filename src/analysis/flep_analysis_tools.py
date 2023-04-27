@@ -1,4 +1,6 @@
+import numpy as np
 import pandas as pd
+from matplotlib import pyplot as plt
 
 
 def get_mean_resto_by_day(
@@ -46,3 +48,32 @@ def get_mean_all_restos_by_day(
     restos_df = restos_df.groupby(str_date_col, as_index=False).mean()
     restos_df = restos_df.sort_values(str_date_col)
     return restos_df
+
+
+def moving_average(x, w):
+    return np.convolve(x, np.ones(w), 'valid') / w
+
+
+def plot_mean_student_price(
+        resto_df: pd.DataFrame,
+        moving_average_window=5,
+        student_price_col="Prix etudiant",
+        date_col="date"
+):
+    temp = moving_average(resto_df[student_price_col], moving_average_window)
+    plt.plot(resto_df[date_col][:len(temp)], temp)
+
+
+def plot_mean_all_prices(
+        resto_df: pd.DataFrame,
+        moving_average_window=5,
+        col_list=None,
+        date_col="date"
+):
+    if col_list is None:
+        col_list = ["Prix etudiant", "Prix doctorant", "Prix campus"]
+
+    for idx, price_range in enumerate(col_list):
+        temp = moving_average(resto_df[price_range], moving_average_window)
+        plt.plot(resto_df[date_col][:len(temp)], temp)
+    plt.show()
