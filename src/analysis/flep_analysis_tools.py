@@ -58,9 +58,14 @@ def plot_mean_student_price(
         resto_df: pd.DataFrame,
         moving_average_window=5,
         student_price_col="Prix etudiant",
-        date_col="date"
-):
+        date_col="date",
+        display_RDR=False):
+    plt.figure(dpi=1200)
     temp = moving_average(resto_df[student_price_col], moving_average_window)
+    if display_RDR:
+        #Find the temp price on the date of 2022-11-09
+        found_value = temp[resto_df[date_col][:len(temp)] == "2022-11-09"]
+        plt.plot(pd.to_datetime("2022-11-09"), found_value, 'ro')
     plt.plot(resto_df[date_col][:len(temp)], temp)
 
 
